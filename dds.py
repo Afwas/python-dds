@@ -92,8 +92,8 @@ class parResults(Structure):
     """     index = 0 is NS view and index = 1 
      is EW view. By 'view' is here meant 
      which side that starts the bidding."""
-    _fields_ = [("parScore", c_char * 2 * 16),
-                ("parContrctsString", c_char * 2 * 128)]
+    _fields_ = [("parScore", ((c_char * 16) * 2)),
+                ("parContractsString", ((c_char * 128) * 2))]
 
 class allParResults(Structure):
     _fields_ = [("presults", parResults * (MAXNOOFBOARDS // 20))]
