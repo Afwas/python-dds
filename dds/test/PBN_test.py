@@ -21,10 +21,10 @@ class PBNTest(unittest.TestCase):
 		self.assertEqual(Hand.Hand.west, 3)
 
 	def test_hand(self):
-		assertEqual(Hand.Hand.north, 0)
-		assertEqual(Hand.Hand.east, 1)
-		assertEqual(Hand.Hand.south, 2)
-		assertEqual(Hand.Hand.west, 3)
+		self.assertEqual(Hand.Hand.north, 0)
+		self.assertEqual(Hand.Hand.east, 1)
+		self.assertEqual(Hand.Hand.south, 2)
+		self.assertEqual(Hand.Hand.west, 3)
 
 	def test_hands(self):
 		self.assertEqual(self.testPBN.get_hand(Hand.Hand.north), ".63.AKQ987.A9732")
