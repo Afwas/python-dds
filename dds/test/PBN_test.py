@@ -6,6 +6,9 @@ class PBNTest(unittest.TestCase):
 	def setUp(self):
 		# print(dir(PBN))
 		self.testPBN = PBN.PBN("[N:.63.AKQ987.A9732 A8654.KQ5.T.QJT6 J973.J98742.3.K4 KQT2.AT.J6542.85]")
+		self.testPBN_east = PBN.PBN("[E:A8654.KQ5.T.QJT6 J973.J98742.3.K4 KQT2.AT.J6542.85 .63.AKQ987.A9732]")
+		self.testPBN_south = PBN.PBN("[S:J973.J98742.3.K4 KQT2.AT.J6542.85 .63.AKQ987.A9732 A8654.KQ5.T.QJT6]")
+		self.testPBN_west = PBN.PBN("[W:KQT2.AT.J6542.85 .63.AKQ987.A9732 A8654.KQ5.T.QJT6 J973.J98742.3.K4]")
 
 	def test_clean_pbn(self):
 		self.assertEqual(len(self.testPBN.get_cards()), 67)
@@ -22,6 +25,11 @@ class PBNTest(unittest.TestCase):
 		self.assertEqual(self.testPBN.get_hand(Hand.Hand.east), "A8654.KQ5.T.QJT6")
 		self.assertEqual(self.testPBN.get_hand(Hand.Hand.south), "J973.J98742.3.K4")
 		self.assertEqual(self.testPBN.get_hand(Hand.Hand.west), "KQT2.AT.J6542.85")
+
+	def test_not_north_as_dealer(self):
+		self.assertEqual(self.testPBN.get_hand(Hand.Hand.east), self.testPBN_east.get_hand(Hand.Hand.east))
+		self.assertEqual(self.testPBN.get_hand(Hand.Hand.south), self.testPBN_south.get_hand(Hand.Hand.south))
+		self.assertEqual(self.testPBN.get_hand(Hand.Hand.west), self.testPBN_west.get_hand(Hand.Hand.west))
 
 if __name__== "__main__":
 	unittest.main()
