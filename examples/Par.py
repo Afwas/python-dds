@@ -21,7 +21,7 @@ for handno in range(0, 3):
         result = "OK"
     else:
         result= "ERROR"
-    print("Par, hand {}: {}".format(handno + 1, result))
+    print("Par, hand {}: {}".format(handno + 1, "OK" if match else "ERROR"))
     print("")
 
     functions.PrintTable(myDDTable)
