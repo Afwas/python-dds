@@ -16,7 +16,7 @@ limitations under the License."""
 
 from ctypes import *
 
-dds = cdll.LoadLibrary("libdds.so")
+dds = cdll.LoadLibrary("/usr/bin/libdds.so")
 print('Loaded lib {0}'.format(dds))
 
 DDS_VERSION = 20700    
@@ -26,6 +26,8 @@ DDS_SUITS = 4
 DDS_STRAINS = 5
 
 MAXNOOFBOARDS = 200
+
+RETURN_NO_FAULT = 1
 
 class futureTricks(Structure):
     _fields_ = [("nodes", c_int),
@@ -82,7 +84,8 @@ class ddTableDealsPBN(Structure):
                 ("deals", ddTableDealPBN * (MAXNOOFBOARDS >> 2))]
 
 class ddTableResults(Structure):
-    _fields_ = [("resTable", c_int * DDS_STRAINS * DDS_HANDS)]
+#    _fields_ = [("resTable", c_int * DDS_STRAINS * DDS_HANDS)]
+    _fields_ = [("resTable", c_int * DDS_HANDS * DDS_STRAINS)]
 
 class ddTablesRes(Structure):
     _fields_ = [("noOfBoards", c_int),

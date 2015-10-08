@@ -1,6 +1,7 @@
 class PBN:
     def __init__(self, PBN_input):
-        """ @TODO At this point the class assumes starting PBN with N"""
+        """self._raw_pbn is meant to always be available and may never be edited.
+        self.PBN is a cleaned up and checked version of the current PBN"""
         self._raw_pbn = PBN_input
         self.PBN = self._convert_to_north_leader()
 
