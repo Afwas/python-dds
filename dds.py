@@ -27,6 +27,87 @@ DDS_STRAINS = 5
 
 MAXNOOFBOARDS = 200
 
+MAXNOOFHANDS = 32
+
+RETURN_NO_FAULT = 1
+TEXT_NO_FAULT = "Success"
+
+RETURN_UNKNOWN_FAULT = -1
+TEXT_UNKNOWN_FAULT = "General error"
+
+RETURN_ZERO_CARDS = -2
+TEXT_ZERO_CARDS = "Zero cards"
+
+RETURN_TARGET_TOO_HIGH = -3
+TEXT_TARGET_TO_HIGH = "Target exceeds number of tricks"
+
+RETURN_DUPLICATE_CARDS = -4
+TEXT_DUPLICATE_CARDS = "Cards duplicated"
+
+RETURN_TARGET_WRONG_LO = -5
+TEXT_TARGET_WRONG_LO = "Target less than -1"
+
+RETURN_TARGET_WRONG_HI = -7
+TEXT_TARGET_WRONG_HI = "Target is higher than 13"
+
+RETURN_SOLNS_WRONG_LO = -8
+TEXT_SOLNS_WRONG_LO = "Solutions parameter is less than 1"
+
+RETURN_SOLNS_WRONG_HI = -9
+TEXT_SOLNS_WRON_HI = "Solutions parameter is higher than 3"
+
+RETURN_TOO_MANY_CARDS = -10
+TEXT_TOO_MANY_CARDS = "Too many cards"
+
+RETURN_SUIT_OR_RANK = -12
+TEXT_SUIT_OR_RANK = \
+    "currentTrickSuit or currentTrickRank has wrong data"
+
+RETURN PLAYED_CARD = -13
+TEXT_PLAYED_CARD = "Played card also remains in a hand"
+
+RETURN_CARD_COUNT = -14
+TEXT_CARD_COUNT = "Wrong number of remaining cards in a hand"
+
+RETURN_THREAD_INDEX = -15
+TEXT_TREAD_INDEX = "Thread inde is not 0 .. maximum"
+
+RETURN_MODE_WRONG_LO = -16
+TEXT_MODE_WRONG_LO = "Mode parameter is less than 0"
+
+RETURN_MODE_WRONG_HI = -17
+TEXT_MODE_WRONG_HI = "Mode parameter is higher than 2"
+
+RETURN_TRUMP_WRONG = -18
+TEXT_TRUMP_WRONG = "Trump is not in 1 .. 4"
+
+RETURN_FIRST_WRONG = -19
+TEXT_FIRST_WRONG = "First is not in 0 .. 2"
+
+RETURN_PLAY_FAULT = -98
+TEXT_PLAY_FAULT = "AnalysePlay input error"
+
+RETURN_PBN_FAULT = -99
+TEXT_PBN_FAULT = "PBN string error"
+
+RETURN_TOO_MANY_BOARDS = -101
+TEXT_TOO_MANY_BOARDS = "Too many boards requested"
+
+RETURN_THREAD_CREATE = -102
+TEXT_THREAD_CREATE = "Could not create threads"
+
+RETURN_THREAD_WAIT = -103
+TEXT_TRHEAD_WAIT = "Something failed waiting for thread to end"
+
+RETURN_NO_SUIT = -201
+TEXT_NO_SUIT = "Denomination filter vector has no entries"
+
+RETURN_TOO_MANY_TABLES = -202
+TEXT_TOO_MANY_TABLES = "Too many DD tables requested"
+
+RETURN_CHUNK_SIZE  =-203
+TEXT_CHUNK_SIZE = "Chunk size is less than 1"
+
 class futureTricks(Structure):
     _fields_ = [("nodes", c_int),
                 ("cards", c_int),
