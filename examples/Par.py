@@ -16,11 +16,6 @@ for handno in range(0, 3):
         print("DDS error: {}".format(line))
 
     match = functions.ComparePar(myPres, handno)
-    result = ""
-    if match:
-        result = "OK"
-    else:
-        result= "ERROR"
     print("Par, hand {}: {}".format(handno + 1, "OK" if match else "ERROR"))
     print("")
 
