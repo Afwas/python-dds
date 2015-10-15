@@ -55,6 +55,10 @@ def ComparePlay(solved, handno):
             return False
     return True
 
+DDS_FULL_LINE = 80
+DDS_HAND_OFFSET = 12
+DDS_HAND_LINES = 12
+
 def PrintHand(title, remainCards):
     text = []
     for l in range(DDS_HAND_LINES):
@@ -128,8 +132,9 @@ def ConvertPBN(dealBuff, remainCards):
     suitInHand = 0
 
     while bp < 80 and dealBuff[bp] != '\0':
-        print("bp : {}". format(str(bp)))
-        print("len(dealBuff) : {}".format(len(dealBuff)))
+        # @TODO Move to calling function
+        # as a way of initializing this thing
+        dealBuff = dealBuff.rjust(80)
         card = IsACard(dealBuff[bp])
         if card:
             if first1 == 0:
@@ -163,7 +168,7 @@ def ConvertPBN(dealBuff, remainCards):
             suitInHand = 0
 
         bp = bp + 1
-    return RETURN_NO_FAULT
+    return dds.RETURN_NO_FAULT
 
 def IsACard(cardChar):
     if cardChar == '2':
