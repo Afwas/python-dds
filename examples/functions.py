@@ -60,9 +60,9 @@ def PrintPBNPlay(playp, solved):
 
     print("Play {:2d}: {} {}\n".format(0, "--", solved.contents.tricks[0]))
 
-    for i in range(solved.contents.number):
-        print("Play {:2d}: {} {}".format(i, playp.contents.cards[2 * (i - 1)], \
-            playp.contents.cards[2 * i - 1], solved.contents.tricks[i]))
+    for i in range(1, solved.contents.number):
+        print("Play {:2d}: {}{} {}".format(i, chr(playp.contents.cards[2 * (i - 1)]), \
+            chr(playp.contents.cards[2 * i - 1]), solved.contents.tricks[i]))
     print()
 
 DDS_FULL_LINE = 80
@@ -74,7 +74,7 @@ def PrintHand(title, remainCards):
     blankLine =  b' ' * 79 + b'\0'
     for l in range(DDS_HAND_LINES):
         text.append([blankLine])
-    print(text)
+#    print(text)
 
     for h in range(dds.DDS_HANDS):
         if h == 0:
@@ -93,7 +93,7 @@ def PrintHand(title, remainCards):
         for s in range(dds.DDS_SUITS):
             c = offset
             for i in range(14, 1):
-                if remainCards[h][s] >> 2 and hands.dbitMapRank[r]:
+                if remainCards[h][s] >> 2 & hands.dbitMapRank[r]:
                     text[line + s].append(hands.dcardRank[r])
                     c = c + 1
 
@@ -109,8 +109,8 @@ def PrintHand(title, remainCards):
 
 def PrintPBNHand(title, remainCardsPBN):
     remainCards = [[[] for j in range(dds.DDS_SUITS)] for i in range(dds.DDS_HANDS)]
-    print(remainCards)
-    print("len(remainCards) : {}".format(len(remainCards)))
+#    print(remainCards)
+#    print("len(remainCards) : {}".format(len(remainCards)))
     ConvertPBN(remainCardsPBN, remainCards)
     PrintHand(title, remainCards)
 
@@ -170,7 +170,7 @@ def ConvertPBN(dealBuff, remainCards):
                 else:
                     hand = handRelFirst - 1
 
-            remainCards[hand][suitInHand] = remainCards[hand][suitInHand] or \
+            remainCards[hand][suitInHand] = remainCards[hand][suitInHand] | \
                 dBitMapRank[card] << 2
         elif dealBuff[bp] == '-':
             suitInHand = suitInHand + 1
