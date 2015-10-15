@@ -56,12 +56,12 @@ def ComparePlay(solved, handno):
     return True
 
 def PrintPBNPlay(playp, solved):
-    print("Number : {}\n".format(solved.contents.number))
+    print("Number : {}".format(solved.contents.number))
 
-    print("Play {:2d}: {} {}\n".format(0, "--", solved.contents.tricks[0]))
+    print("Play {:2d}: {} {}".format(0, "--", solved.contents.tricks[0]))
 
     for i in range(1, solved.contents.number):
-        print("Play {:2d}: {}{} {}".format(i, chr(playp.contents.cards[2 * (i - 1)]), \
+        print("Play {:2d}: {}{} {:2d}".format(i, chr(playp.contents.cards[2 * (i - 1)]), \
             chr(playp.contents.cards[2 * i - 1]), solved.contents.tricks[i]))
     print()
 
@@ -71,10 +71,10 @@ DDS_HAND_LINES = 12
 
 def PrintHand(title, remainCards):
     text = []
-    blankLine =  b' ' * 79 + b'\0'
+    blankLine =  b''
+    blankLine = blankLine.ljust(80)
     for l in range(DDS_HAND_LINES):
-        text.append([blankLine])
-#    print(text)
+        text.append(bytearray(blankLine))
 
     for h in range(dds.DDS_HANDS):
         if h == 0:
@@ -92,28 +92,36 @@ def PrintHand(title, remainCards):
 
         for s in range(dds.DDS_SUITS):
             c = offset
-            for i in range(14, 1):
-                if remainCards[h][s] >> 2 & hands.dbitMapRank[r]:
-                    text[line + s].append(hands.dcardRank[r])
+            for r in range(14, 1, -1):
+                if (int(remainCards[h][s]) >> 2) & hands.dbitMapRank[r]:
+                    text[line + s][c] = ord(hands.dcardRank[r])
                     c = c + 1
 
         if c == offset:
-            text[line + s].append('-')
+            text[line + s][c] = ord('-')
             c = c + 1
 
         if h != 3:
-            text[line + s].append('\0')
+            text[line + s][c] = ord('\0')
             c = c + 1
+
+    # Print it
+    print("{}".format(title))
+    dashes = bytearray('', "utf-8")
+    dashes = dashes.ljust(80)
+    l = len(title) - 1
+    for i in range(l):
+        dashes[i] = ord('-')
+    print("{}".format(dashes.decode("utf-8")))
+    for i in range(DDS_HAND_LINES):
+        print("{}".format(text[i].decode("utf-8")))
+    print("\n")
 
 
 
 def PrintPBNHand(title, remainCardsPBN):
     remainCards = [[[] for j in range(dds.DDS_SUITS)] for i in range(dds.DDS_HANDS)]
-#    print(remainCards)
-#    print("len(remainCards) : {}".format(len(remainCards)))
     ConvertPBN(remainCardsPBN, remainCards)
-    print(remainCards)
-    # So far it seems to work
     PrintHand(title, remainCards)
 
 def ConvertPBN(dealBuff, remainCards):
@@ -130,9 +138,6 @@ def ConvertPBN(dealBuff, remainCards):
         return 0
 
     # dealBuff[bp] now in "NESWnesw" 
-
-    print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
-
     if chr(dealBuff[bp]) == 'N' or chr(dealBuff[bp]) == 'n':
         first1 = 0
     elif chr(dealBuff[bp]) == 'E' or chr(dealBuff[bp]) == 'e':
@@ -141,27 +146,20 @@ def ConvertPBN(dealBuff, remainCards):
         first1 = 2
     else:
         first1 = 3
-    print("firstl: {}".format(first1))
 
     # Skip ":" in PBN string
     bp = bp + 2
-    print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
-    print("bp: {}".format(bp))
 
     # bp pointer now at start of first card
-
     handRelFirst= 0
     suitInHand = 0
     # @TODO Move to calling function
     # as a way of initializing this thing
     dealBuff = dealBuff.ljust(80)
-    print(dealBuff)
-    while bp < 80 and dealBuff[bp] != b'\0':
 
+    while bp < 80 and dealBuff[bp] != b'\0':
         card = IsACard(chr(dealBuff[bp]))
-#        print("card: {}".format(card))
         if card:
-#            print("firstl: {}".format(first1))
             if first1 == 0:
                 hand = handRelFirst
             elif first1 == 1:
@@ -183,28 +181,16 @@ def ConvertPBN(dealBuff, remainCards):
                     hand = 3
                 else:
                     hand = handRelFirst - 1
-#            print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
-#            print("handRelFirst: {}".format(handRelFirst))
-#            print("hand: {}".format(hand))
-
-#            print("remainCards[hand][suitInHand]: {}".format(remainCards[hand][suitInHand]))
-#            print("ḧands.dbitMapRank[card] << 2: {}".format(hands.dbitMapRank[card] << 2))
-#            remainCards[hand][suitInHand] = remainCards[hand][suitInHand] or \
-#                hands.dbitMapRank[card] << 2
             remainCards[hand][suitInHand] = int(remainCards[hand][suitInHand]) | (hands.dbitMapRank[card] << 2)
-#            print("chr(remainCards[hand][suitInHand]): {}".format(remainCards[hand][suitInHand]))
         elif chr(dealBuff[bp]) == '.':
             suitInHand = suitInHand + 1
         elif chr(dealBuff[bp]) == ' ':
             handRelFirst = handRelFirst + 1
             suitInHand = 0
-#        print("handRelFirst: {}".format(handRelFirst))
-
         bp = bp + 1
     return dds.RETURN_NO_FAULT
 
 def IsACard(cardChar):
-#    print("cardChar: {}".format(chr(cardChar)))
     if cardChar == '2':
         return 2
     if cardChar == '3':

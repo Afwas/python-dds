@@ -26,7 +26,7 @@ for handno in range(3):
 
     myDlPBN.remainCards = hands.PBN[handno]
 
-    print(myDlPBN.remainCards)
+#    print(myDlPBN.remainCards)
 
     myDDplayPBN.number = hands.playNo[handno]
     myDDplayPBN.cards = hands.play[handno]
@@ -39,10 +39,9 @@ for handno in range(3):
 
     match = functions.ComparePlay(mySolved, handno)
 
-    print("AnalysePlayPBNBin, hand {}: {}\n".format(handno + 1, \
-        "OK" if match else "ERROR"))
+    line = "AnalysePlayPBNBin, hand {}: {}".format(handno + 1, \
+        "OK" if match else "ERROR")
 
-
-    functions.PrintPBNHand(b'' * 80, myDlPBN.remainCards + b'' * 20)
+    functions.PrintPBNHand(line, myDlPBN.remainCards + b'' * 20)
 
     functions.PrintPBNPlay(ctypes.pointer(myDDplayPBN), mySolved)
