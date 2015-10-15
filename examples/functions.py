@@ -49,7 +49,7 @@ def ComparePlay(solved, handno):
             hands.traceNo[handno]))
         return False
     for i in range(solved.contents.number):
-        if solved.contents.tricks[i] != hands.trace[handno]:
+        if solved.contents.tricks[i] != hands.trace[handno][i]:
             print("error {} {} {}\n".format(i, solved.contents.tricks[i], \
                 hands.trace[handno][i]))
             return False
@@ -112,11 +112,11 @@ def PrintPBNHand(title, remainCardsPBN):
 #    print(remainCards)
 #    print("len(remainCards) : {}".format(len(remainCards)))
     ConvertPBN(remainCardsPBN, remainCards)
+    print(remainCards)
+    # So far it seems to work
     PrintHand(title, remainCards)
 
 def ConvertPBN(dealBuff, remainCards):
-
-    print(remainCards)
     for h in range(dds.DDS_HANDS):
         for s in range(dds.DDS_SUITS):
             remainCards[h][s] = b'0'
@@ -126,28 +126,42 @@ def ConvertPBN(dealBuff, remainCards):
         bp = bp + 1
 
     if bp >= 3:
+        # NESW not fount in first characters of PBN string
         return 0
 
-    if dealBuff[bp] == 'N' or dealBuff[bp] == 'n':
+    # dealBuff[bp] now in "NESWnesw" 
+
+    print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
+
+    if chr(dealBuff[bp]) == 'N' or chr(dealBuff[bp]) == 'n':
         first1 = 0
-    elif dealBuff[bp] == 'E' or dealBuff[bp] == 'e':
+    elif chr(dealBuff[bp]) == 'E' or chr(dealBuff[bp]) == 'e':
         first1 = 1
-    elif dealBuff[bp] == 'S' or dealBuff[bp] == 's':
+    elif chr(dealBuff[bp]) == 'S' or chr(dealBuff[bp]) == 's':
         first1 = 2
     else:
         first1 = 3
+    print("firstl: {}".format(first1))
 
+    # Skip ":" in PBN string
     bp = bp + 2
+    print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
+    print("bp: {}".format(bp))
+
+    # bp pointer now at start of first card
 
     handRelFirst= 0
     suitInHand = 0
+    # @TODO Move to calling function
+    # as a way of initializing this thing
+    dealBuff = dealBuff.ljust(80)
+    print(dealBuff)
+    while bp < 80 and dealBuff[bp] != b'\0':
 
-    while bp < 80 and dealBuff[bp] != '\0':
-        # @TODO Move to calling function
-        # as a way of initializing this thing
-        dealBuff = dealBuff.rjust(80)
-        card = IsACard(dealBuff[bp])
+        card = IsACard(chr(dealBuff[bp]))
+#        print("card: {}".format(card))
         if card:
+#            print("firstl: {}".format(first1))
             if first1 == 0:
                 hand = handRelFirst
             elif first1 == 1:
@@ -161,7 +175,7 @@ def ConvertPBN(dealBuff, remainCards):
                 if handRelFirst == 0:
                     hand = 2
                 elif handRelFirst == 1:
-                    hand - 3
+                    hand = 3
                 else:
                     hand = handRelFirst - 2
             else:
@@ -169,19 +183,28 @@ def ConvertPBN(dealBuff, remainCards):
                     hand = 3
                 else:
                     hand = handRelFirst - 1
+#            print("dealBuff[bp]: {}".format(chr(dealBuff[bp])))
+#            print("handRelFirst: {}".format(handRelFirst))
+#            print("hand: {}".format(hand))
 
-            remainCards[hand][suitInHand] = remainCards[hand][suitInHand] | \
-                dBitMapRank[card] << 2
-        elif dealBuff[bp] == '-':
+#            print("remainCards[hand][suitInHand]: {}".format(remainCards[hand][suitInHand]))
+#            print("ḧands.dbitMapRank[card] << 2: {}".format(hands.dbitMapRank[card] << 2))
+#            remainCards[hand][suitInHand] = remainCards[hand][suitInHand] or \
+#                hands.dbitMapRank[card] << 2
+            remainCards[hand][suitInHand] = int(remainCards[hand][suitInHand]) | (hands.dbitMapRank[card] << 2)
+#            print("chr(remainCards[hand][suitInHand]): {}".format(remainCards[hand][suitInHand]))
+        elif chr(dealBuff[bp]) == '.':
             suitInHand = suitInHand + 1
-        elif dealBuff[bp] == ' ':
+        elif chr(dealBuff[bp]) == ' ':
             handRelFirst = handRelFirst + 1
             suitInHand = 0
+#        print("handRelFirst: {}".format(handRelFirst))
 
         bp = bp + 1
     return dds.RETURN_NO_FAULT
 
 def IsACard(cardChar):
+#    print("cardChar: {}".format(chr(cardChar)))
     if cardChar == '2':
         return 2
     if cardChar == '3':
