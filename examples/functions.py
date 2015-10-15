@@ -55,15 +55,26 @@ def ComparePlay(solved, handno):
             return False
     return True
 
+def PrintPBNPlay(playp, solved):
+    print("Number : {}\n".format(solved.contents.number))
+
+    print("Play {:2d}: {} {}\n".format(0, "--", solved.contents.tricks[0]))
+
+    for i in range(solved.contents.number):
+        print("Play {:2d}: {} {}".format(i, playp.contents.cards[2 * (i - 1)], \
+            playp.contents.cards[2 * i - 1], solved.contents.tricks[i]))
+    print()
+
 DDS_FULL_LINE = 80
 DDS_HAND_OFFSET = 12
 DDS_HAND_LINES = 12
 
 def PrintHand(title, remainCards):
     text = []
+    blankLine =  b' ' * 79 + b'\0'
     for l in range(DDS_HAND_LINES):
-        text[l] = text[l] + ' ' * (DDS_FULL_LINE - len(text[l]))
-    assert(len(text[l]) == DDS_FULL_LINE)
+        text.append([blankLine])
+    print(text)
 
     for h in range(dds.DDS_HANDS):
         if h == 0:
@@ -72,14 +83,14 @@ def PrintHand(title, remainCards):
         elif h == 1:
             offset = DDS_HAND_OFFSET * 2
             line = 4
-        elif h == 4:
+        elif h == 2:
             offset = DDS_HAND_OFFSET
-            line = 9
+            line = 8
         else:
             offset = 0
             line = 4
 
-        for s in range(DDS_SUITS):
+        for s in range(dds.DDS_SUITS):
             c = offset
             for i in range(14, 1):
                 if remainCards[h][s] >> 2 and hands.dbitMapRank[r]:
@@ -87,7 +98,7 @@ def PrintHand(title, remainCards):
                     c = c + 1
 
         if c == offset:
-            text[line + c].append('-')
+            text[line + s].append('-')
             c = c + 1
 
         if h != 3:

@@ -45,4 +45,4 @@ for handno in range(3):
 
     functions.PrintPBNHand(b'' * 80, myDlPBN.remainCards + b'' * 20)
 
-    functions.PrintPBNPlay(ctypes.pointer(myDDplayPBN), solved)
+    functions.PrintPBNPlay(ctypes.pointer(myDDplayPBN), mySolved)
