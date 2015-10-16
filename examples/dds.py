@@ -32,10 +32,10 @@ RETURN_NO_FAULT = 1
 class futureTricks(Structure):
     _fields_ = [("nodes", c_int),
                 ("cards", c_int),
-                ("suit", c_char * 13),
-                ("rank", c_char * 13),
-                ("equals", c_char * 13),
-                ("score", c_char * 13)]
+                ("suit", c_int * 13),
+                ("rank", c_int * 13),
+                ("equals", c_int * 13),
+                ("score", c_int * 13)]
 
 class deal(Structure):
     _fields_ = [("trump", c_int),

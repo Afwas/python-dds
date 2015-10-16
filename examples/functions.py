@@ -3,27 +3,28 @@ import dds
 import ctypes
 
 def PrintFut(title, fut):
-    print("{}".format(title))
+    print("{}\n".format(title))
 
-    print("{:6s} {:-6s} {:-6s} {:-6s} {:-6s}".format( \
+    print("{:6s} {:<6s} {:<6s} {:<6s} {:<6s}".format( \
         "card", "suit", "rank", "equals", "score"))
 
     for i in range(fut.contents.cards):
-        res = ctypes.pointer(ctypes.c_char * 15)
+        res = ctypes.create_string_buffer(15)
         equals_to_string(fut.contents.equals[i], res)
-        print("{:6s} {:-6s} {:-6s} {:-6s} {:-6s}".format( \
+        print("{:6} {:<6s} {:<6s} {:<6s} {:<6}".format( \
             i, \
             hands.dcardSuit[fut.contents.suit[i]], \
             hands.dcardRank[fut.contents.rank[i]], \
-            res, \
+            res.value.decode("utf-8"), \
             fut.contents.score[i]))
+    print()
 
 def equals_to_string(equals, res):
     p = 0
     m = equals >> 2
     for i in range(15, 1, -1):
-        if m & int(dbitMapRank[i]):
-            res[p] = chr(dcardRank[i])
+        if m & int(hands.dbitMapRank[i]):
+            res[p] = bytes(hands.dcardRank[i], "ascii")
             p = p + 1
     res[p] = 0
 
@@ -43,6 +44,7 @@ def CompareFut(fut, handno, solutions):
             return False
         if fut.contents.score[i] != hands.cardsScores[handno][i]:
             return False
+    return True
 
 def SetTable(table, handno):
     for suit in range(0, dds.DDS_STRAINS):
@@ -92,7 +94,7 @@ def ComparePlay(solved, handno):
         return False
     for i in range(solved.contents.number):
         if solved.contents.tricks[i] != hands.trace[handno][i]:
-            print("error {} {} {}\n".format(i, solved.contents.tricks[i], \
+            print("error  {} {} {}\n".format(i, solved.contents.tricks[i], \
                 hands.trace[handno][i]))
             return False
     return True
@@ -151,7 +153,7 @@ def PrintHand(title, remainCards):
     print("{}".format(title))
     dashes = bytearray('', "utf-8")
     dashes = dashes.ljust(80)
-    l = len(title) - 1
+    l = len(title)
     for i in range(l):
         dashes[i] = ord('-')
     print("{}".format(dashes.decode("utf-8")))

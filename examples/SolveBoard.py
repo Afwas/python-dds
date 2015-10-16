@@ -32,7 +32,7 @@ for handno in range(3):
 
 	for h in range(dds.DDS_HANDS):
 		for s in range(dds.DDS_SUITS):
-			dl.remainCards[h][s] = hands.holdings[handno][h][s]
+			dl.remainCards[h][s] = hands.holdings[handno][s][h]
 
 	target = -1 # No target; find maximum results
 	solutions = 3 # Return 3 solutions
@@ -41,7 +41,7 @@ for handno in range(3):
 
 	if res != dds.RETURN_NO_FAULT:
 		dds.ErrorMessage(res, line)
-		print("DDS error: {}".format(str(line.value)))
+		print("DDS error: {}".format(line.value.decode("utf-8")))
 
 	match3 = functions.CompareFut(myFut3, handno, solutions)
 
@@ -49,7 +49,7 @@ for handno in range(3):
 	res = dds.SolveBoard(dl, target, solutions, mode, myFut2, threadIndex)
 	if res != dds.RETURN_NO_FAULT:
 		dds.ErrorMessage(res, line)
-		print("DDS error: {}".format(str(line.value)))
+		print("DDS error: {}".format(line.value.decode("utf-8")))
 
 	match2 = functions.CompareFut(myFut2, handno, solutions)
 
