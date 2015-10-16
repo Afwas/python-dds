@@ -51,6 +51,12 @@ def SetTable(table, handno):
         for pl in range(0, 4):
            table.contents.resTable[suit][pl] = hands.DDtable[handno][4 * suit + pl]
 
+def CompareTable(table, handno):
+    for suit in range(dds.DDS_STRAINS):
+        for pl in range(4):
+            if table.contents.resTable[suit][pl] != hands.DDtable[handno][4 * suit + pl]:
+                return False
+    return True
 
 def ComparePar(par, handno):
     if par.contents.parScore[0] == hands.parScore[handno][0]:
@@ -65,15 +71,15 @@ def ComparePar(par, handno):
     return True
 
 def PrintTable(table):
-    print("{:5}{:>5}{:>5}{:>5}{:>5}".format("", "North", "East", "South", "West"))
-    print("{:5}{:5}{:5}{:5}{:5}".format(
+    print("{:5} {:<5} {:<5} {:<5} {:<5}".format("", "North", "South", "East", "West"))
+    print("{:>5} {:5} {:5} {:5} {:5}".format(
         "NT",
         table.contents.resTable[4][0],
         table.contents.resTable[4][2],
         table.contents.resTable[4][1],
         table.contents.resTable[4][3]))
     for suit in range(0, dds.DDS_SUITS):
-        print("{:5}{:5}{:5}{:5}{:5}".format(
+        print("{:>5} {:5} {:5} {:5} {:5}".format(
             hands.dcardSuit[suit],
             table.contents.resTable[suit][0],
             table.contents.resTable[suit][2],
