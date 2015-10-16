@@ -2,6 +2,48 @@ import hands
 import dds
 import ctypes
 
+def PrintFut(title, fut):
+    print("{}".format(title))
+
+    print("{:6s} {:-6s} {:-6s} {:-6s} {:-6s}".format( \
+        "card", "suit", "rank", "equals", "score"))
+
+    for i in range(fut.contents.cards):
+        res = ctypes.pointer(ctypes.c_char * 15)
+        equals_to_string(fut.contents.equals[i], res)
+        print("{:6s} {:-6s} {:-6s} {:-6s} {:-6s}".format( \
+            i, \
+            hands.dcardSuit[fut.contents.suit[i]], \
+            hands.dcardRank[fut.contents.rank[i]], \
+            res, \
+            fut.contents.score[i]))
+
+def equals_to_string(equals, res):
+    p = 0
+    m = equals >> 2
+    for i in range(15, 1, -1):
+        if m & int(dbitMapRank[i]):
+            res[p] = chr(dcardRank[i])
+            p = p + 1
+    res[p] = 0
+
+def CompareFut(fut, handno, solutions):
+    if solutions == 2:
+        if fut.contents.cards != hands.cardsSoln2[handno]:
+            return False
+    elif fut.contents.cards != hands.cardsSoln3[handno]:
+        return False
+
+    for i in range(fut.contents.cards):
+        if fut.contents.suit[i] != hands.cardsSuits[handno][i]:
+            return False
+        if fut.contents.rank[i] != hands.cardsRanks[handno][i]:
+            return False
+        if fut.contents.equals[i] != hands.cardsEquals[handno][i]:
+            return False
+        if fut.contents.score[i] != hands.cardsScores[handno][i]:
+            return False
+
 def SetTable(table, handno):
     for suit in range(0, dds.DDS_STRAINS):
         for pl in range(0, 4):

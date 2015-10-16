@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-"""Copyright 2014 Foppe HEMMINGA
+"""Copyright 2014 - 2015 Foppe HEMMINGA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -360,3 +360,9 @@ pointer to struct solvedPlays * solvedp
 int chunkSize"""
 AnalyseAllPlaysPBN.argtypes = [POINTER(boardsPBN), POINTER(playTracesPBN), POINTER(solvedPlays), c_int]
 AnalyseAllPlaysPBN.restype = c_int
+
+ErrorMessage = dds.ErrorMessage
+"""int code
+char * 80"""
+ErrorMessage.argtypes = [c_int, POINTER(c_char)]
+ErrorMessage.restype = c_int
