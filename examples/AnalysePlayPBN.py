@@ -35,7 +35,7 @@ for handno in range(3):
 
     if res != dds.RETURN_NO_FAULT:
         dds.ErrorMessage(res, line)
-        print("DDS error: {}\n".format(line))
+        print("DDS error: {}\n".format(line.value.decode("utf-8")))
 
     match = functions.ComparePlay(mySolved, handno)
 
