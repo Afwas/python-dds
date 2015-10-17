@@ -105,6 +105,19 @@ def ComparePlay(solved, handno):
             return False
     return True
 
+def PrintBinPlay(playp, solved):
+    print("Number : {}".format(solved.contents.number))
+
+    print("Play {:2}: {} {}".format(
+        0, "--", solved.contents.tricks[0]))
+
+    for i in range(solved.contents.number):
+        print("Play {:2}: {}{} {}".format(
+            i,
+            hands.dcardSuit[playp.contents.suit[i - 1]],
+            hands.dcardRank[playp.contents.rank[i - 1]],
+            solved.contents.tricks[i]))
+
 def PrintPBNPlay(playp, solved):
     print("Number : {}".format(solved.contents.number))
 
