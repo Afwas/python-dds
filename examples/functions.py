@@ -47,8 +47,8 @@ def CompareFut(fut, handno, solutions):
     return True
 
 def SetTable(table, handno):
-    for suit in range(0, dds.DDS_STRAINS):
-        for pl in range(0, 4):
+    for suit in range(dds.DDS_STRAINS):
+        for pl in range(4):
            table.contents.resTable[suit][pl] = hands.DDtable[handno][4 * suit + pl]
 
 def CompareTable(table, handno):
@@ -87,11 +87,31 @@ def PrintTable(table):
             table.contents.resTable[suit][3]))
     print("")
 
+def CompareDealerPar(par, handno):
+    if par.contents.number != hands.dealerParNo[handno]:
+        return False
+    if par.contents.score != hands.dealerScore[handno]:
+        return False
+    for i in range(par.contents.number):
+        if par.contents.contracts[i].value.decode("utf-8") != hands.dealerContract[handno][i]:
+            return False
+    return True
+
 def PrintPar(par):
     print("NS score: {}".format(par.contents.parScore[0].value.decode('utf-8')))
     print("EW score: {}".format(par.contents.parScore[1].value.decode('utf-8')))
     print("NS list : {}".format(par.contents.parContractsString[0].value.decode('utf-8')))
     print("EW list : {}\n".format(par.contents.parContractsString[1].value.decode('utf-8')))
+
+def PrintDealerPar(par):
+    print("Score: {}".format(par.contents.score))
+    print("Pars: {}".format(par.contents.number))
+
+    for i in range(par.contents.number):
+        print("Par {}: :{}".format(
+            i,
+            par.contents.contracts[i].value.decode("utf-8")))
+    print()
 
 def ComparePlay(solved, handno):
     if solved.contents.number != hands.traceNo[handno]:

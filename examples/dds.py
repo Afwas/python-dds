@@ -99,7 +99,7 @@ class parResults(Structure):
                 ("parContractsString", ((c_char * 128) * 2))]
 
 class allParResults(Structure):
-    _fields_ = [("presults", parResults * (MAXNOOFBOARDS // 20))]
+    _fields_ = [("presults", parResults * MAXNOOFBOARDS)]
 
 class parResultsDealer(Structure):
     _fields_ = [("number", c_int),
@@ -208,8 +208,8 @@ int mode
 int trumpFilter[DDS_STRAINS]
 poiter to struct ddTablesRes * resp
 pointer to struct allParResults'* presp"""
-CalcAllTables.argtypes = [POINTER(ddTableDeals), c_int * DDS_STRAINS, \
-    c_int, POINTER(ddTablesRes), POINTER(allParResults)]
+CalcAllTables.argtypes = [POINTER(ddTableDeals), c_int, c_int * DDS_STRAINS, \
+    POINTER(ddTablesRes), POINTER(allParResults)]
 CalcAllTables.restype = c_int
 
 CalcAllTablesPBN = dds.CalcAllTablesPBN
@@ -218,8 +218,8 @@ int mode
 int trumpFilter[DDS_STRINS]
 pointer to struct ddTablesRes *resp
 pointer to struct allParResults * presp"""
-CalcAllTablesPBN.argtypes = [POINTER(ddTableDealsPBN), c_int * DDS_STRAINS, \
-    c_int, POINTER(ddTablesRes), POINTER(allParResults)]
+CalcAllTablesPBN.argtypes = [POINTER(ddTableDealsPBN), c_int, c_int * DDS_STRAINS, \
+    POINTER(ddTablesRes), POINTER(allParResults)]
 CalcAllTablesPBN.restype = c_int
 
 SolveAllBoards = dds.SolveAllBoards
