@@ -131,12 +131,13 @@ def PrintBinPlay(playp, solved):
     print("Play {:2}: {} {}".format(
         0, "--", solved.contents.tricks[0]))
 
-    for i in range(solved.contents.number):
+    for i in range(1, solved.contents.number):
         print("Play {:2}: {}{} {}".format(
             i,
             hands.dcardSuit[playp.contents.suit[i - 1]],
             hands.dcardRank[playp.contents.rank[i - 1]],
             solved.contents.tricks[i]))
+    print()
 
 def PrintPBNPlay(playp, solved):
     print("Number : {}".format(solved.contents.number))
@@ -144,8 +145,11 @@ def PrintPBNPlay(playp, solved):
     print("Play {:2d}: {} {}".format(0, "--", solved.contents.tricks[0]))
 
     for i in range(1, solved.contents.number):
-        print("Play {:2d}: {}{} {:2d}".format(i, chr(playp.contents.cards[2 * (i - 1)]), \
-            chr(playp.contents.cards[2 * i - 1]), solved.contents.tricks[i]))
+        print("Play {:2d}: {}{} {:2d}".format(
+            i, 
+            chr(playp.contents.cards[2 * (i - 1)]),
+            chr(playp.contents.cards[2 * i - 1]),
+            solved.contents.tricks[i]))
     print()
 
 DDS_FULL_LINE = 80
