@@ -1,10 +1,10 @@
-=== Examples ===
+## Examples
 This folder contains Python files implementing the original dds examples. These examples show the use of the internal dds functions.
 I implemented the functions in Python in a way that is consistent with the original C implementations. This means that the code is not so much Pythonic but might help a developer creating a package implementing these functions.
 
 I suggest you stay away from the bin files and use the PBN alternatives instead. The bin files use the dds specific implementation of a deal. The PBN alternatives are a facade that convert a deal in PBN to that dds implementation. This is done inside dds and hence (thanks to the C / C++ implementation) faster than you probably could implement.
 
-== AnalyseAllPlaysBin.py ==
+### AnalyseAllPlaysBin.py
 This function takes a deal and a description of the cards played. At each play of a card it will evaluate the total number of tricks leader can make. If either a defender or the leader makes a mistake you see a shift in the verwachting. This is deal number 2 (of three) where you see this shift after the lead and later in the game. Note that four cards make a trick.
 
 ```
