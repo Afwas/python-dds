@@ -2,39 +2,79 @@
 
 import dds
 import ctypes
+import hands
+import functions
 
-"""In this first example I will solve a PBN hand with SolveBoardPBN"""
+dlPBN = dds.dealPBN()
+fut2 = dds.futureTricks()
+fut3 = dds.futureTricks()
 
-# Trump = 4 -> No trump
-# Hand = 3 -> West to lead which means South is declarer
-# We can specify up to three cards already played in the current trick
-# Suit of played cards this trick -> No cards have been played so far
-# Rank of played cards this trick -> No cards have been played so far
-# PBN: The deal to be examined
-sarr = [0, 0, 0]
-suitArr = (ctypes.c_int * 3)(*sarr)
-rarr = [0, 0, 0]
-rankArr = (ctypes.c_int * 3)(*rarr)
-myPBN = b"W:T5.K4.652.A98542 K6.QJT976.QT7.Q6 432.A.AKJ93.JT73 AQJ987.8532.84.K"
-"""trump (0 = S, 1 = H, 2 = D, 3 = C, NT = 4)
-hand to lead (N = 0, E = 1, S = 2, W = 3),
-played cards (suit) in this trick
-played cards (rank) in this trick
-PBN"""
-deal = dds.dealPBN(4, 3, suitArr, rankArr, myPBN)
+threadIndex = 0
+line = ctypes.create_string_buffer(80)
 
-# Placeholder for the results
-future = dds.futureTricks()
-print(future)
-myfut = ctypes.pointer(dds.futureTricks())
-print(myfut)
-res = dds.SolveBoardPBN(deal, -1, 1, 1, myfut, 0)
-print(myfut)
-print(res)
-#'cards', 'equals', 'nodes', 'rank', 'score', 'suit'
-print("nodes  ", myfut.contents.nodes)
-print("cards  ", myfut.contents.cards)
-print("suit   ", list(myfut.contents.suit))
-print("rank   ", list(myfut.contents.rank))
-print("equals ", list(myfut.contents.equals))
-print("score  ", list(myfut.contents.score))
+dds.SetMaxThreads(0)
+
+for handno in range(3):
+    dlPBN.trump = hands.trump[handno]
+    dlPBN.first = hands.first[handno]
+
+    dlPBN.currentTrickSuit[0] = 0
+    dlPBN.currentTrickSuit[1] = 0
+    dlPBN.currentTrickSuit[2] = 0
+
+    dlPBN.currentTrickRank[0] = 0
+    dlPBN.currentTrickRank[1] = 0
+    dlPBN.currentTrickRank[2] = 0
+
+    dlPBN.remainCards = hands.PBN[handno]
+
+    target = -1
+    solutions = 3
+    mode = 0
+    res = dds.SolveBoardPBN(
+        dlPBN,
+        target,
+        solutions,
+        mode,
+        ctypes.pointer(fut3),
+        0)
+
+    if res != dds.RETURN_NO_FAULT:
+        dds.ErrorMessage(res, line)
+        print("DDS error {}".format(line.value.decode("utf-8")))
+
+    match3 = functions.CompareFut(
+        ctypes.pointer(fut3),
+        handno,
+        solutions)
+
+    solutions = 2
+    res = dds.SolveBoardPBN(
+        dlPBN,
+        target,
+        solutions,
+        mode,
+        ctypes.pointer(fut2),
+        0)
+    if res != dds.RETURN_NO_FAULT:
+        dds.ErrorMessage(res, line)
+        print("DDS error {}".foramt(line.value.decode("utf-8")))
+
+    match2= functions.CompareFut(
+        ctypes.pointer(fut2),
+        handno,
+        solutions)
+
+    line = "SolveBoardPBN, hand {}: solutions 3 {}, solutions 2{}".format(
+        handno + 1,
+        "OK" if match3 else "ERROR",
+        "OK" if match2 else "ERROR")
+
+    functions.PrintPBNHand(line, dlPBN.remainCards)
+
+    line = "solutions == 3"
+    functions.PrintFut(line, ctypes.pointer(fut3))
+    line = "solutions == 2"
+    functions.PrintFut(line, ctypes.pointer(fut2))
+
+
