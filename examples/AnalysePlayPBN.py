@@ -4,44 +4,48 @@ import hands
 import functions
 
 dlPBN = dds.dealPBN()
-myDlPBN = dlPBN
 DDplayPBN = dds.playTracePBN()
-myDDplayPBN = DDplayPBN
 solved = dds.solvedPlay()
-mySolved = ctypes.pointer(solved)
+
+line = ctypes.create_string_buffer(80);
 
 threadIndex = 0
 
 for handno in range(3):
-    myDlPBN.trump = hands.trump[handno]
-    myDlPBN.first = hands.first[handno]
+    dlPBN.trump = hands.trump[handno]
+    dlPBN.first = hands.first[handno]
 
-    myDlPBN.currentTrickSuit[0] = 0
-    myDlPBN.currentTrickSuit[1] = 0
-    myDlPBN.currentTrickSuit[2] = 0
+    dlPBN.currentTrickSuit[0] = 0
+    dlPBN.currentTrickSuit[1] = 0
+    dlPBN.currentTrickSuit[2] = 0
 
-    myDlPBN.currentTrickRank[0] = 0
-    myDlPBN.currentTrickRank[1] = 0
-    myDlPBN.currentTrickRank[2] = 0
+    dlPBN.currentTrickRank[0] = 0
+    dlPBN.currentTrickRank[1] = 0
+    dlPBN.currentTrickRank[2] = 0
 
-    myDlPBN.remainCards = hands.PBN[handno]
+    dlPBN.remainCards = hands.PBN[handno]
 
 #    print(myDlPBN.remainCards)
 
-    myDDplayPBN.number = hands.playNo[handno]
-    myDDplayPBN.cards = hands.play[handno]
+    DDplayPBN.number = hands.playNo[handno]
+    DDplayPBN.cards = hands.play[handno]
 
-    res = dds.AnalysePlayPBN(myDlPBN, myDDplayPBN, mySolved, threadIndex)
+    res = dds.AnalysePlayPBN(
+        dlPBN,
+        DDplayPBN,
+        ctypes.pointer(solved),
+        threadIndex)
 
     if res != dds.RETURN_NO_FAULT:
         dds.ErrorMessage(res, line)
         print("DDS error: {}\n".format(line.value.decode("utf-8")))
 
-    match = functions.ComparePlay(mySolved, handno)
+    match = functions.ComparePlay(ctypes.pointer(solved), handno)
 
-    line = "AnalysePlayPBNBin, hand {}: {}".format(handno + 1, \
+    line = "AnalysePlayPBNBin, hand {}: {}".format(
+        handno + 1,
         "OK" if match else "ERROR")
 
-    functions.PrintPBNHand(line, myDlPBN.remainCards + b'' * 20)
+    functions.PrintPBNHand(line, dlPBN.remainCards)
 
-    functions.PrintPBNPlay(ctypes.pointer(myDDplayPBN), mySolved)
+    functions.PrintPBNPlay(ctypes.pointer(DDplayPBN), ctypes.pointer(solved))
