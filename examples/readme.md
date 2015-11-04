@@ -4,10 +4,10 @@ I implemented the functions in Python in a way that is consistent with the origi
 
 I suggest you stay away from the bin files and use the PBN alternatives instead. The bin files use the dds specific implementation of a deal. The PBN alternatives are a facade that convert a deal in PBN to that dds implementation. This is done inside dds and hence (thanks to the C / C++ implementation) faster than you probably could implement.
 
-### AnalyseAllPlaysBin.py
-### AnalyseAllPlaysPBN.py
-### AnalysePlayBin.py
-### AnalysePlayPBN.py
+#### AnalyseAllPlaysBin.py
+#### AnalyseAllPlaysPBN.py
+#### AnalysePlayBin.py
+#### AnalysePlayPBN.py
 This function takes a deal and a description of the cards played. At each play of a card it will evaluate the total number of tricks leader can make. If either a defender or the leader makes a mistake you see a shift in the expectation. This is deal number 2 (of three) where you see this shift later in the game. Note that four cards make a trick.
 North is dealer in a NT contract. Double dummy leader can be held to nine tricks.
 The cardplay is given (likely this happened at the table). East leads SQ. Now leader can make 10 tricks. However in trick 10 leader decides not to play a club to the King and ends with nine tricks.
@@ -81,9 +81,9 @@ Play 47: CA 9
 Play 48: C6 9
 
 ```
-### CalcAllTablesBin.py
-### CalcAllTablesPBN.py
-### CalcDDtablePBN.py
+#### CalcAllTablesBin.py
+#### CalcAllTablesPBN.py
+#### CalcDDtablePBN.py
 The deal is analysed from all players in all nominations. In some deals it can matter which player is declarer.
 ```
 CalcDDtable, hand 2: OK
@@ -147,7 +147,9 @@ NS list : NS:EW 4Sx
 EW list : EW:EW 4Sx
 ```
 
-### SolveBoard.py
+#### SolveBoard.py
+#### SolveBoardPBN.py
+#### SolveAllBoards.py
 
 ```
 SolveBoard, hand 2: solutions 3 OK, solutions 2 OK
